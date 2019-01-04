@@ -39,4 +39,4 @@ app.put('/users', async (req, res) => {
   res.json(await users.updateItem(req.body))
 })
 
-app.listen(3000, () => console.log('API rodando na porta 3000'))
+app.listen(process.env.PORT || 3000, () => console.log(`API rodando na porta ${process.env.PORT || 3000}`))
