@@ -1,11 +1,35 @@
 const { Pool } = require('pg')
+const MongoClient = require('mongodb').MongoClient
+// Connection url
+const url = 'mongodb://admin:senha10@ds157499.mlab.com:57499/dbfabio'
+// Database Name
+const dbName = 'dbfabio'
 
 const pool = {}
+
+MongoClient.connect(url, (err, client) => {
+  if (err) return err
+  next(client)
+})
+var index = 1
+var max = 5000000
+const next = (client) => {
+  client.db(dbName).collection('usuarios').insert({ nome: `Usuario demo ${index}` }, function (err, data) {
+    if (err) console.log(`Não foi possível inserir ${index}!`)
+    console.log(`Inseriu ${index}`)
+    index++
+    if (index < max) {
+      next(client)
+    } else {
+      console.log('CAbo!')
+    }
+  })
+}
 
 // pool.connect()
 
 const createItem = async (user) => {
-  return pool.query('insert into pessoa values ($1, $2, $3, $4)', [user.id, user.nome, user.email, user.fone])
+  return user
 }
 
 const getAll = async () => {
